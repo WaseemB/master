@@ -10,5 +10,6 @@ public static void main (String[] args){
 	System.out.println("dataModel 	= "+dataModel);
 	System.out.println("vmVersion 	= "+vmVersion);
 	System.out.println("osArch    	= "+osArch);
+	System.out.println("========================")
 	}
 }
