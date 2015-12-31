@@ -1,0 +1,10 @@
+TEMP_SENSORS:
+		0: 
+		serial: 28-0014545b61ff
+		1: 
+		serial: 28-000006538351
+		2: 
+		serial: 28-0014545795ff
+
+		BASE_DIR: "/sys/bus/w1/devices/" 
+
