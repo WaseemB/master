@@ -2,11 +2,17 @@
 # script by Alex Eames http://RasPi.tv/
 # http://raspi.tv/2013/how-to-use-interrupts-with-python-on-the-raspberry-pi-and-rpi-gpio
 # 
-# control the status of door switch, and the green and yellow led
+# control the status of door switch, and the green and yellow/red led
  
 # GPIO 23 set up as input. It is pulled up to stop false signals
 
+
+import signal
+import sys
+import time
+
 import RPi.GPIO as GPIO
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -33,20 +39,21 @@ def door():
 	try:
 		while True:
     			GPIO.wait_for_edge(23, GPIO.FALLING)
-			print "door close"
+			print (time.strftime("%d/%m/%Y %H:%M:%S Door closed"))
+			#print "door close"
 			GPIO.output(17,True)
 			GPIO.output(27,False)
 			GPIO.wait_for_edge(23, GPIO.RISING)
-                	print "door open"
+                	print (time.strftime("%d/%m/%Y %H:%M:%S Door opened"))
                 	GPIO.output(17,False)
                 	GPIO.output(27,True)
     			#print "\nFalling edge detected. Now your program can continue with"
     			#print "whatever was waiting for a button press."
 	except KeyboardInterrupt:
-		GPIO(17,False)
-		GPIO(27,False)
-		GPIO(23,False)  ## not sure if this is possible
+		sys.exit(0)
+	except:
+		print "All other errors"
 	finally:
-		print "\n\ncleaning up!\n"
 		GPIO.cleanup()           # clean up GPIO on CTRL+C exit
-		print "*** Done! ***\n"
+		print "*** Door Cleanup Done! ***\n"
+

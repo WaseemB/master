@@ -1,18 +1,12 @@
 #!/usr/bin/python
-#+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-#|R|a|s|p|b|e|r|r|y|P|i|-|S|p|y|.|c|o|.|u|k|
-#+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-#
+
 # pir_1.py
 # Detect movement using a PIR module
 #
-# Author : Matt Hawkins
-# Date   : 21/01/2013
-
-# Import required Python libraries
-#
 # motion detection
+# Import required Python libraries
 
+import sys
 import time
 import RPi.GPIO as GPIO
 
@@ -25,7 +19,6 @@ def motion():
 	GPIO.setup(8,GPIO.OUT)
 
 	try:
-
 		print "Waiting for PIR to settle ..."
   		time.sleep(10)
 
@@ -40,24 +33,23 @@ def motion():
     			Current_State = GPIO.input(GPIO_PIR)
     			if Current_State==1 and Previous_State==0:
       				# PIR is triggered
-      				print (time.strftime("%d/%m/%Y"))
-      				print (time.strftime("%H:%M:%S"))
-      				GPIO.output(8,True)
-      				print "  Motion detected!"
+      				print (time.strftime("%d/%m/%Y-%H:%M:%S Motion detected"))
+      				# put the led to True
+				GPIO.output(8,True)
       				time.sleep(1)
       				GPIO.output(8,False)
-      				print "------------------"
       				# Record previous state
       				Previous_State=1
     			elif Current_State==0 and Previous_State==1:
       				# PIR has returned to ready state
-      				print "  Ready"
-      				Previous_State=0
-      
+      				Previous_State=0      
     				# Wait for 1000 milliseconds
     				time.sleep(1)      
       
 	except KeyboardInterrupt:
-  		print "  Quit" 
-  	# Reset GPIO settings
-  	GPIO.cleanup()
+		sys.exit(0)
+	except:
+		print "All other errors"
+  	finally:
+		GPIO.cleanup()
+		print "*** PIR Cleanup Done! ***\n"
