@@ -16,8 +16,11 @@ def motion():
 	Current_State = 0
 	Previous_State = 0
 	GPIO.setup(GPIO_PIR, GPIO.IN)
-	GPIO.setup(8,GPIO.OUT)
-
+	GPIO.setup(25,GPIO.OUT)
+	GPIO.output(25,False)
+	GPIO.setup(12,GPIO.OUT)
+	GPIO.output(12,False)
+	
 	try:
 		print "Waiting for PIR to settle ..."
   		time.sleep(10)
@@ -35,9 +38,11 @@ def motion():
       				# PIR is triggered
       				print (time.strftime("%d/%m/%Y-%H:%M:%S Motion detected"))
       				# put the led to True
-				GPIO.output(8,True)
-      				time.sleep(1)
-      				GPIO.output(8,False)
+				GPIO.output(25,True)
+      				GPIO.output(12,True)
+				time.sleep(1) ### time for siren on
+      				GPIO.output(25,False)
+				GPIO.output(12,False)
       				# Record previous state
       				Previous_State=1
     			elif Current_State==0 and Previous_State==1:
