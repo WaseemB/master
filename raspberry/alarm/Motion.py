@@ -24,10 +24,6 @@ def motion():
 	try:
 		print "Waiting for PIR to settle ..."
   		time.sleep(10)
-
-  		# Loop until PIR output is 0
-  		while GPIO.input(GPIO_PIR)==1:
-    			Current_State  = 0
   		print "  Ready"
   
   		# Loop until users quits with CTRL-C
@@ -39,7 +35,7 @@ def motion():
       				print (time.strftime("%d/%m/%Y-%H:%M:%S Motion detected"))
       				# put the led to True
 				GPIO.output(25,True)
-      				GPIO.output(12,True)
+      				GPIO.output(12,True) # trigger transistor base to siren
 				time.sleep(1) ### time for siren on
       				GPIO.output(25,False)
 				GPIO.output(12,False)
@@ -47,9 +43,7 @@ def motion():
       				Previous_State=1
     			elif Current_State==0 and Previous_State==1:
       				# PIR has returned to ready state
-      				Previous_State=0      
-    				# Wait for 1000 milliseconds
-    				time.sleep(1)      
+      				Previous_State=0            
       
 	except KeyboardInterrupt:
 		sys.exit(0)
