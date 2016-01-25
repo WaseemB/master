@@ -1,5 +1,3 @@
-#!/usr/bin/env python2.7
-# script by Alex Eames http://RasPi.tv/
 # http://raspi.tv/2013/how-to-use-interrupts-with-python-on-the-raspberry-pi-and-rpi-gpio
 # 
 # control the status of door switch, and the green and yellow/red led
@@ -7,11 +5,14 @@
 # GPIO 23 set up as input. It is pulled up to stop false signals
 
 
+import logging
 import signal
 import sys
 import time
 
 import RPi.GPIO as GPIO
+
+from logging.handlers import RotatingFileHandler
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -22,33 +23,35 @@ GPIO.output(17,False)
 GPIO.output(27,False)
 
 def door():
+	"""
+	Creates a rotating log
+    	"""
+	logger = logging.getLogger("Rotating Log")
+	logger.setLevel(logging.INFO)	
+	
+	# add a rotating handler
+	handler = RotatingFileHandler("door.log", maxBytes=200000,backupCount=5)
+	logger.addHandler(handler)
+	
+	
 	GPIO.setup(23, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-	#print "Make sure you have a button connected so that when pressed"
-	#print "it will connect GPIO port 23 (pin 16) to GND (pin 6)\n"
-	#raw_input("Press Enter when ready\n>")
-
 	print "Waiting for falling edge on port 23"
-	# now the program will do nothing until the signal on port 23 
-	# starts to fall towards zero. This is why we used the pullup
-	# to keep the signal high and prevent a false interrupt
-
-	#print "During this waiting time, your computer is not" 
-	#print "wasting resources by polling for a button press.\n"
-	#print "Press your button when ready to initiate a falling edge interrupt."
+	
 	try:
 		while True:
     			GPIO.wait_for_edge(23, GPIO.FALLING)
-			print (time.strftime("%d/%m/%Y %H:%M:%S Door closed"))
+			logger.info(time.strftime("%d/%m/%Y %H:%M:%S  Door close"))
+			print (time.strftime("%d/%m/%Y %H:%M:%S   Door close"))
 			#print "door close"
 			GPIO.output(17,True)
 			GPIO.output(27,False)
 			GPIO.wait_for_edge(23, GPIO.RISING)
-                	print (time.strftime("%d/%m/%Y %H:%M:%S Door opened"))
+			logger.info(time.strftime("%d/%m/%Y %H:%M:%S  Door open"))
+                	print (time.strftime("%d/%m/%Y %H:%M:%S   Door open"))
                 	GPIO.output(17,False)
                 	GPIO.output(27,True)
-    			#print "\nFalling edge detected. Now your program can continue with"
-    			#print "whatever was waiting for a button press."
+    			
 	except KeyboardInterrupt:
 		sys.exit(0)
 	except:
