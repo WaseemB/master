@@ -8,6 +8,10 @@
 
 import logging
 import time
+import os
+#import motionAlarmPIR1
+#import motionAlarmPIR2
+
 import RPi.GPIO as GPIO
 
 from logging.handlers import RotatingFileHandler
@@ -48,9 +52,11 @@ def motion():
 				print (time.strftime("%d/%m/%Y-%H:%M:%S   PIR1: Motion detected"))
 				logger.info(time.strftime("%d/%m/%Y-%H:%M:%S   PIR1: Motion detected"))
 				pir1_motion_detected=1
+				os.system("./motionAlarmPIR1.py")
 			if GPIO.input(GPIO_PIR2) and pir2_motion_detected==0:
 				logger.info(time.strftime("%d/%m/%Y-%H:%M:%S   PIR2: Motion detected")) 
 				pir2_motion_detected=1
+				os.system("./motionAlarmPIR2.py")
     			Current_State = GPIO.input(GPIO_PIR1) or GPIO.input(GPIO_PIR2) 
     			if Current_State==1 and Previous_State==0:
 				print (time.strftime("%d/%m/%Y-%H:%M:%S   PIR2: Motion detected"))
