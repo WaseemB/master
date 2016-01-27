@@ -9,6 +9,8 @@
 import logging
 import time
 import os
+import sys
+
 #import motionAlarmPIR1
 #import motionAlarmPIR2
 
