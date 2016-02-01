@@ -56,6 +56,7 @@ def motion():
 				pir1_motion_detected=1
 				os.system("./motionAlarmPIR1.py")
 			if GPIO.input(GPIO_PIR2) and pir2_motion_detected==0:
+				print (time.strftime("%d/%m/%Y-%H:%M:%S   PIR2: Motion detected"))
 				logger.info(time.strftime("%d/%m/%Y-%H:%M:%S   PIR2: Motion detected")) 
 				pir2_motion_detected=1
 				os.system("./motionAlarmPIR2.py")
