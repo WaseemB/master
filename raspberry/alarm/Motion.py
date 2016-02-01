@@ -15,6 +15,7 @@ import sys
 #import motionAlarmPIR2
 
 import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
 
 from logging.handlers import RotatingFileHandler
 
@@ -22,16 +23,10 @@ GPIO_PIR1 = 7
 GPIO_PIR2 = 8
 
 def motion():
-	Current_State = 0
-	Previous_State = 0
-	pir1_motion_detected = 0
-	pir2_motion_detected = 0
 	GPIO.setup(GPIO_PIR1, GPIO.IN)
 	GPIO.setup(GPIO_PIR2, GPIO.IN)
 	GPIO.setup(25,GPIO.OUT)
-	GPIO.output(25,False)
 	GPIO.setup(12,GPIO.OUT)
-	GPIO.output(12,False)
 	"""
     	Creates a rotating log
     	"""
@@ -48,7 +43,12 @@ def motion():
   		print "  Ready"
   
   		# Loop until users quits with CTRL-C
-  		while True :
+  		while(1):
+			GPIO.output(12,False)
+			GPIO.output(25,False)
+			pir1_motion_detected = 0
+			pir2_motion_detected = 0
+			Previous_State = 0
     			# Read PIR state
 			if GPIO.input(GPIO_PIR1) and pir1_motion_detected==0:
 				print (time.strftime("%d/%m/%Y-%H:%M:%S   PIR1: Motion detected"))
@@ -59,29 +59,15 @@ def motion():
 				print (time.strftime("%d/%m/%Y-%H:%M:%S   PIR2: Motion detected"))
 				logger.info(time.strftime("%d/%m/%Y-%H:%M:%S   PIR2: Motion detected")) 
 				pir2_motion_detected=1
-				os.system("./motionAlarmPIR2.py")
-    			Current_State = GPIO.input(GPIO_PIR1) or GPIO.input(GPIO_PIR2) 
-    			if Current_State==1 and Previous_State==0:
-				print (time.strftime("%d/%m/%Y-%H:%M:%S   PIR2: Motion detected"))
-				logger.info(time.strftime("%d/%m/%Y-%H:%M:%S   PIR2: Motion detected"))
+				os.system("./motionAlarmPIR2.py") 
+			if pir1_motion_detected==1 or pir2_motion_detected==1:
       				# put the led to True
 				GPIO.output(25,True)
       				GPIO.output(12,True) # trigger transistor base to siren
 				time.sleep(2) ### time for siren on
-      				GPIO.output(25,False)
-				GPIO.output(12,False)
-      				# Record previous state
-      				Previous_State=1
-    			elif Current_State==0 and Previous_State==1:
-      				# PIR has returned to ready state
-      				Previous_State=0
-				pir1_motion_detected=0
-				pir2_motion_detected=0            
-      
+          
 	except KeyboardInterrupt:
-		sys.exit(0)
-	except:
-		print "All other errors"
-  	finally:
+		GPIO.output(25,False)
+		GPIO.output(12,False)
 		GPIO.cleanup()
-		print "*** PIR Cleanup Done! ***\n"
+		sys.exit(0)
