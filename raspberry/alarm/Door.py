@@ -7,6 +7,7 @@
 
 import logging
 import signal
+import os
 import sys
 import time
 
@@ -39,24 +40,22 @@ def door():
 	print "Waiting for falling edge on port 23"
 	
 	try:
-		while True:
+		while(1):
     			GPIO.wait_for_edge(23, GPIO.FALLING)
 			logger.info(time.strftime("%d/%m/%Y %H:%M:%S  Door close"))
 			print (time.strftime("%d/%m/%Y %H:%M:%S   Door close"))
-			#print "door close"
 			GPIO.output(17,True)
 			GPIO.output(27,False)
 			GPIO.wait_for_edge(23, GPIO.RISING)
 			logger.info(time.strftime("%d/%m/%Y %H:%M:%S  Door open"))
                 	print (time.strftime("%d/%m/%Y %H:%M:%S   Door open"))
+			os.system("./doorAlert.py")
                 	GPIO.output(17,False)
                 	GPIO.output(27,True)
     			
 	except KeyboardInterrupt:
+		GPIO.output(17,False)
+		GPIO.output(27,False)
+		GPIO.cleanup()
 		sys.exit(0)
-	except:
-		print "All other errors"
-	finally:
-		GPIO.cleanup()           # clean up GPIO on CTRL+C exit
-		print "*** Door Cleanup Done! ***\n"
 
