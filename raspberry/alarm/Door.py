@@ -49,7 +49,7 @@ def door():
 			GPIO.wait_for_edge(23, GPIO.RISING)
 			logger.info(time.strftime("%d/%m/%Y %H:%M:%S  Door open"))
                 	print (time.strftime("%d/%m/%Y %H:%M:%S   Door open"))
-			os.system("./doorAlert.py")
+			#os.system("./doorAlert.py")
                 	GPIO.output(17,False)
                 	GPIO.output(27,True)
     			

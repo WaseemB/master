@@ -11,9 +11,6 @@ import time
 import os
 import sys
 
-#import motionAlarmPIR1
-#import motionAlarmPIR2
-
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 
@@ -54,18 +51,18 @@ def motion():
 				print (time.strftime("%d/%m/%Y-%H:%M:%S   PIR1: Motion detected"))
 				logger.info(time.strftime("%d/%m/%Y-%H:%M:%S   PIR1: Motion detected"))
 				pir1_motion_detected=1
-				os.system("./motionAlarmPIR1.py")
+				#os.system("./motionAlertPIR1.py")
 			if GPIO.input(GPIO_PIR2) and pir2_motion_detected==0:
 				print (time.strftime("%d/%m/%Y-%H:%M:%S   PIR2: Motion detected"))
 				logger.info(time.strftime("%d/%m/%Y-%H:%M:%S   PIR2: Motion detected")) 
 				pir2_motion_detected=1
-				os.system("./motionAlarmPIR2.py") 
+				#os.system("./motionAlertPIR2.py") 
 			if pir1_motion_detected==1 or pir2_motion_detected==1:
       				# put the led to True
 				GPIO.output(25,True)
       				GPIO.output(12,True) # trigger transistor base to siren
 				time.sleep(2) ### time for siren on
-          
+          			#time.sleep(60) ### time for siren on
 	except KeyboardInterrupt:
 		GPIO.output(25,False)
 		GPIO.output(12,False)
