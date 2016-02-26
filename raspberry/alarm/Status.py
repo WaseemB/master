@@ -7,7 +7,7 @@ import sys
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 
-GPIO_blinkingLed = 2
+GPIO_blinkingLed = 26
 GPIO.setup(GPIO_blinkingLed,GPIO.OUT)
 GPIO.output(GPIO_blinkingLed,False)
 
