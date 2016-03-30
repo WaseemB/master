@@ -23,3 +23,6 @@ def status():
 		GPIO(GPIO_blinkingLed,False)
 		GPIO.cleanup()
 		sys.exit(0)
+
+if __name__ == '__main__':
+	status()

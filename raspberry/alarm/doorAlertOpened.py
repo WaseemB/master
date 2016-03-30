@@ -5,13 +5,13 @@ import time
 
 SENDMAIL = "/usr/sbin/sendmail" # sendmail location
 
-FROM = "raspberrypi-004"
+FROM = "raspberrypi"
 #TO = ["waseem.besada@gmail.com"]
 TO = ["waseem@telia.com"]
 
-SUBJECT = "Door Alarm!"
+SUBJECT = "Raspberry Door Opened Alarm!"
 
-TEXT = time.strftime("%d/%m/%Y-%H:%M:%S")+"   Door open alarm!"
+TEXT = time.strftime("%d/%m/%Y-%H:%M:%S")+"   Door Opened Alarm!"
 
 # Prepare actual message
 
